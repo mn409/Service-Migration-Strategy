@@ -1,6 +1,6 @@
 # MigrationOps — Cloud Service Deprecation Analytics
 
-A full-stack analytics platform simulating a cloud service deprecation and customer migration program — built as a portfolio project for Azure Data PM roles.
+A full-stack analytics platform simulating a cloud service deprecation and customer migration program.
 
 **[Live Demo →](https://service-migration-strategy.mn409.replit.app)** &nbsp;|&nbsp; Built with PostgreSQL · Express · React · Recharts · TanStack Table
 
@@ -131,4 +131,4 @@ ServiceEvents
 
 ---
 
-*Built for the Microsoft Azure Data PM portfolio context. All data is simulated.*
+*All data is simulated.*
