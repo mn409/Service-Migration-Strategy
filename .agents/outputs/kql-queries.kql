@@ -1,0 +1,176 @@
+// ============================================================
+// Cloud Service Deprecation & Migration Analytics
+// KQL (Kusto Query Language) Telemetry Queries
+// Simulated for Azure Data Explorer / Log Analytics workspace
+// Author: Platform Analytics Team
+// Last Updated: 2026-05-28
+// ============================================================
+//
+// Assumed tables:
+//   ServiceEvents   — streaming event telemetry
+//   ServiceUsers    — user dimension table (batch-synced daily)
+//
+// Run these in Azure Data Explorer or Log Analytics.
+// ============================================================
+
+
+// ============================================================
+// 1. DAILY ACTIVE USERS BY VERSION (Last 90 Days)
+// ============================================================
+// Trend view of DAU per service version. Shows the migration
+// shift over time as v1/v2 users decline and v3 grows.
+
+ServiceEvents
+| where timestamp >= ago(90d)
+| summarize
+    DAU = dcount(userId),
+    TotalEvents = count(),
+    ErrorEvents = countif(isnotempty(errorCode))
+    by serviceVersion, bin(timestamp, 1d)
+| order by timestamp asc, serviceVersion asc
+| project
+    Date = format_datetime(timestamp, 'yyyy-MM-dd'),
+    Version = serviceVersion,
+    DailyActiveUsers = DAU,
+    TotalEvents,
+    ErrorRate = round(ErrorEvents * 100.0 / TotalEvents, 2)
+
+
+// ============================================================
+// 2. ERROR SPIKE DETECTION (Last 30 Days)
+// ============================================================
+// Identifies hourly windows where error rate exceeded 15%
+// per version per region — flags potential service incidents
+// or API deprecation-related failures on v1/v2.
+
+ServiceEvents
+| where timestamp >= ago(30d)
+| summarize
+    TotalEvents = count(),
+    ErrorEvents = countif(isnotempty(errorCode)),
+    AffectedUsers = dcount(userId)
+    by serviceVersion, region, bin(timestamp, 1h)
+| extend ErrorRate = round(ErrorEvents * 100.0 / TotalEvents, 2)
+| where ErrorRate > 15
+| order by timestamp desc
+| project
+    Hour = format_datetime(timestamp, 'yyyy-MM-dd HH:mm'),
+    Version = serviceVersion,
+    Region = region,
+    ErrorRate,
+    AffectedUsers,
+    TotalEvents
+
+
+// ============================================================
+// 3. VERSION USAGE TREND (Weekly Rollup, Last 6 Months)
+// ============================================================
+// Weekly aggregation of version usage share — useful for
+// migration velocity reporting and exec-level status updates.
+
+ServiceEvents
+| where timestamp >= ago(180d)
+| summarize EventCount = count() by serviceVersion, bin(timestamp, 7d)
+| as weekly_counts
+| join kind=inner (
+    ServiceEvents
+    | where timestamp >= ago(180d)
+    | summarize TotalWeek = count() by bin(timestamp, 7d)
+) on timestamp
+| extend UsageShare = round(EventCount * 100.0 / TotalWeek, 1)
+| order by timestamp asc
+| project
+    Week = format_datetime(timestamp, 'yyyy-[W]WW'),
+    Version = serviceVersion,
+    EventCount,
+    UsageSharePct = UsageShare
+
+
+// ============================================================
+// 4. EVENT LOG FILTER — LAST 7 DAYS
+// ============================================================
+// Operational log view for the past 7 days, filtered to
+// error events only. Useful for incident triage.
+
+ServiceEvents
+| where timestamp >= ago(7d)
+| where isnotempty(errorCode)
+| order by timestamp desc
+| project
+    Timestamp = format_datetime(timestamp, 'yyyy-MM-dd HH:mm:ss'),
+    UserId = userId,
+    Version = serviceVersion,
+    Region = region,
+    EventType = eventType,
+    ErrorCode = errorCode,
+    LatencyMs = latencyMs
+| take 1000
+
+
+// ============================================================
+// 5. EVENT LOG FILTER — LAST 30 DAYS (ALL EVENTS)
+// ============================================================
+// Full event log for last 30 days with no error filter.
+// Useful for usage audits or compliance exports.
+
+ServiceEvents
+| where timestamp >= ago(30d)
+| order by timestamp desc
+| project
+    Timestamp = format_datetime(timestamp, 'yyyy-MM-dd HH:mm:ss'),
+    UserId = userId,
+    Version = serviceVersion,
+    Region = region,
+    EventType = eventType,
+    ErrorCode = iif(isempty(errorCode), 'None', errorCode),
+    LatencyMs = latencyMs
+
+
+// ============================================================
+// 6. REGIONAL ERROR BREAKDOWN (Last 30 Days)
+// ============================================================
+// Error rate by region and version — useful for identifying
+// if deprecation-related failures are concentrated in specific
+// geographies (e.g., EU compliance may block v3 migration).
+
+ServiceEvents
+| where timestamp >= ago(30d)
+| summarize
+    TotalEvents = count(),
+    Errors = countif(isnotempty(errorCode)),
+    UniqueUsers = dcount(userId)
+    by region, serviceVersion
+| extend ErrorRatePct = round(Errors * 100.0 / TotalEvents, 2)
+| order by region asc, serviceVersion asc
+| project
+    Region = region,
+    Version = serviceVersion,
+    UniqueUsers,
+    TotalEvents,
+    Errors,
+    ErrorRatePct
+
+
+// ============================================================
+// 7. LATENCY PERCENTILES BY VERSION
+// ============================================================
+// P50/P95/P99 latency per version. High v1 latency is a key
+// selling point for the migration pitch to Enterprise accounts.
+
+ServiceEvents
+| where timestamp >= ago(30d)
+| summarize
+    P50 = percentile(latencyMs, 50),
+    P95 = percentile(latencyMs, 95),
+    P99 = percentile(latencyMs, 99),
+    AvgLatency = round(avg(latencyMs), 0),
+    SampleCount = count()
+    by serviceVersion
+| order by P95 desc
+| project
+    Version = serviceVersion,
+    AvgLatencyMs = AvgLatency,
+    P50_ms = P50,
+    P95_ms = P95,
+    P99_ms = P99,
+    SampleCount

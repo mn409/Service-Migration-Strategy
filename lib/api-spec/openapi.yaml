@@ -3,13 +3,20 @@ info:
   # Do not change the title, if the title changes, the import paths will be broken
   title: Api
   version: 0.1.0
-  description: API specification
+  description: Cloud Service Deprecation & Migration Analytics API
 servers:
   - url: /api
     description: Base API path
 tags:
   - name: health
     description: Health operations
+  - name: analytics
+    description: Migration analytics endpoints
+  - name: users
+    description: User management and segmentation
+  - name: telemetry
+    description: Telemetry and KQL-style event queries
+
 paths:
   /healthz:
     get:
@@ -24,6 +31,249 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/HealthStatus"
+
+  /analytics/summary:
+    get:
+      operationId: getAnalyticsSummary
+      tags: [analytics]
+      summary: Dashboard KPI summary
+      description: Top-level KPIs — total users, deprecated version count, migration rate, avg error rate
+      responses:
+        "200":
+          description: Summary KPIs
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AnalyticsSummary"
+
+  /analytics/version-distribution:
+    get:
+      operationId: getVersionDistribution
+      tags: [analytics]
+      summary: Active users by service version
+      description: Count of active users on each service version (v1, v2, v3)
+      responses:
+        "200":
+          description: Version distribution
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/VersionCount"
+
+  /analytics/migration-funnel:
+    get:
+      operationId: getMigrationFunnel
+      tags: [analytics]
+      summary: Migration progress funnel
+      description: Funnel stages for deprecated user migration (Identified → Contacted → In Progress → Migrated)
+      responses:
+        "200":
+          description: Migration funnel stages
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/FunnelStage"
+
+  /analytics/regional-distribution:
+    get:
+      operationId: getRegionalDistribution
+      tags: [analytics]
+      summary: Regional usage distribution
+      description: User counts and error rates broken down by region
+      responses:
+        "200":
+          description: Regional data
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/RegionStats"
+
+  /analytics/daily-active-users:
+    get:
+      operationId: getDailyActiveUsers
+      tags: [analytics]
+      summary: Daily active users time series
+      description: Daily active user counts per version over the last 90 days
+      parameters:
+        - name: days
+          in: query
+          required: false
+          schema:
+            type: integer
+            default: 90
+      responses:
+        "200":
+          description: Daily active users series
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/DailyActiveUsers"
+
+  /analytics/error-trends:
+    get:
+      operationId: getErrorTrends
+      tags: [analytics]
+      summary: Error rate trends over time
+      description: Daily error rates per version for spike detection
+      parameters:
+        - name: days
+          in: query
+          required: false
+          schema:
+            type: integer
+            default: 30
+      responses:
+        "200":
+          description: Error trend series
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ErrorTrendPoint"
+
+  /analytics/churn-risk:
+    get:
+      operationId: getChurnRiskSegments
+      tags: [analytics]
+      summary: Churn risk user segments
+      description: User counts broken down by churn risk level (high/medium/low) and subscription tier
+      responses:
+        "200":
+          description: Churn risk segments
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ChurnRiskSegment"
+
+  /users:
+    get:
+      operationId: getUsers
+      tags: [users]
+      summary: List users with filters
+      description: Paginated user list with optional filters for version, region, tier, churn risk
+      parameters:
+        - name: version
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: region
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: tier
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: churnRisk
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: activeOnly
+          in: query
+          required: false
+          schema:
+            type: boolean
+        - name: deprecated
+          in: query
+          required: false
+          schema:
+            type: boolean
+        - name: page
+          in: query
+          required: false
+          schema:
+            type: integer
+            default: 1
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+            default: 50
+      responses:
+        "200":
+          description: User list
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserListResponse"
+
+  /users/frequency-segments:
+    get:
+      operationId: getUserFrequencySegments
+      tags: [users]
+      summary: Users segmented by usage frequency
+      description: Counts of users per usage frequency bucket (high/medium/low) per version
+      responses:
+        "200":
+          description: Frequency segment counts
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/FrequencySegment"
+
+  /telemetry/event-log:
+    get:
+      operationId: getEventLog
+      tags: [telemetry]
+      summary: Recent activity event log
+      description: Simulated KQL-style event log for the last N days with version, region, event type
+      parameters:
+        - name: days
+          in: query
+          required: false
+          schema:
+            type: integer
+            default: 7
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+            default: 100
+      responses:
+        "200":
+          description: Event log entries
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/EventLogEntry"
+
+  /telemetry/error-spikes:
+    get:
+      operationId: getErrorSpikes
+      tags: [telemetry]
+      summary: Detected error spike events
+      description: Error spike detection — hours where error rate exceeded threshold per version
+      responses:
+        "200":
+          description: Error spike events
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ErrorSpike"
+
 components:
   schemas:
     HealthStatus:
@@ -34,3 +284,217 @@ components:
       required:
         - status
 
+    AnalyticsSummary:
+      type: object
+      required:
+        - totalUsers
+        - activeUsers30d
+        - deprecatedVersionUsers
+        - migratedUsers
+        - migrationRate
+        - avgErrorRate
+        - highChurnUsers
+        - pendingMigrations
+      properties:
+        totalUsers:
+          type: integer
+        activeUsers30d:
+          type: integer
+        deprecatedVersionUsers:
+          type: integer
+        migratedUsers:
+          type: integer
+        migrationRate:
+          type: number
+        avgErrorRate:
+          type: number
+        highChurnUsers:
+          type: integer
+        pendingMigrations:
+          type: integer
+
+    VersionCount:
+      type: object
+      required: [version, count, percentage, isDeprecated]
+      properties:
+        version:
+          type: string
+        count:
+          type: integer
+        percentage:
+          type: number
+        isDeprecated:
+          type: boolean
+
+    FunnelStage:
+      type: object
+      required: [stage, count, percentage]
+      properties:
+        stage:
+          type: string
+        count:
+          type: integer
+        percentage:
+          type: number
+
+    RegionStats:
+      type: object
+      required: [region, totalUsers, activeUsers, avgErrorRate, v1Users, v2Users, v3Users]
+      properties:
+        region:
+          type: string
+        totalUsers:
+          type: integer
+        activeUsers:
+          type: integer
+        avgErrorRate:
+          type: number
+        v1Users:
+          type: integer
+        v2Users:
+          type: integer
+        v3Users:
+          type: integer
+
+    DailyActiveUsers:
+      type: object
+      required: [date, total, v1, v2, v3]
+      properties:
+        date:
+          type: string
+        total:
+          type: integer
+        v1:
+          type: integer
+        v2:
+          type: integer
+        v3:
+          type: integer
+
+    ErrorTrendPoint:
+      type: object
+      required: [date, v1ErrorRate, v2ErrorRate, v3ErrorRate]
+      properties:
+        date:
+          type: string
+        v1ErrorRate:
+          type: number
+        v2ErrorRate:
+          type: number
+        v3ErrorRate:
+          type: number
+
+    ChurnRiskSegment:
+      type: object
+      required: [churnRisk, tier, count, avgErrorRate, avgDaysSinceActive]
+      properties:
+        churnRisk:
+          type: string
+        tier:
+          type: string
+        count:
+          type: integer
+        avgErrorRate:
+          type: number
+        avgDaysSinceActive:
+          type: number
+
+    UserRecord:
+      type: object
+      required:
+        - id
+        - userId
+        - serviceVersion
+        - lastActiveDate
+        - usageFrequency
+        - region
+        - errorRate
+        - subscriptionTier
+        - migrationStatus
+        - churnRisk
+        - daysSinceActive
+      properties:
+        id:
+          type: integer
+        userId:
+          type: string
+        serviceVersion:
+          type: string
+        lastActiveDate:
+          type: string
+        usageFrequency:
+          type: string
+        region:
+          type: string
+        errorRate:
+          type: number
+        subscriptionTier:
+          type: string
+        migrationStatus:
+          type: string
+        churnRisk:
+          type: string
+        daysSinceActive:
+          type: integer
+
+    UserListResponse:
+      type: object
+      required: [users, total, page, limit]
+      properties:
+        users:
+          type: array
+          items:
+            $ref: "#/components/schemas/UserRecord"
+        total:
+          type: integer
+        page:
+          type: integer
+        limit:
+          type: integer
+
+    FrequencySegment:
+      type: object
+      required: [version, frequency, count]
+      properties:
+        version:
+          type: string
+        frequency:
+          type: string
+        count:
+          type: integer
+
+    EventLogEntry:
+      type: object
+      required: [id, timestamp, userId, serviceVersion, region, eventType, errorCode, latencyMs]
+      properties:
+        id:
+          type: integer
+        timestamp:
+          type: string
+        userId:
+          type: string
+        serviceVersion:
+          type: string
+        region:
+          type: string
+        eventType:
+          type: string
+        errorCode:
+          type: ["string", "null"]
+        latencyMs:
+          type: integer
+
+    ErrorSpike:
+      type: object
+      required: [timestamp, version, errorRate, affectedUsers, region]
+      properties:
+        timestamp:
+          type: string
+        version:
+          type: string
+        errorRate:
+          type: number
+        affectedUsers:
+          type: integer
+        region:
+          type: string
