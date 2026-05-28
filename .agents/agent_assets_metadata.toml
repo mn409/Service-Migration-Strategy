@@ -1,0 +1,8 @@
+uploads = []
+generated = []
+
+[[outputs]]
+id = "xVHhbxKlvA8Qo8_W-3Mqy"
+uri = "file://.agents/outputs/portfolio-guide.md"
+type = "text"
+title = "MigrationOps — Complete Interview Guide"

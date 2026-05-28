@@ -1,0 +1,196 @@
+Microsoft
+Careers
+Locations
+Professions
+Programs
+Life at Microsoft
+Hiring tips
+Join talent network
+Search 
+Sign in
+Jobs
+200037192
+
+City, state, or country/region
+
+Search jobs
+
+Job cart
+1
+
+Work site
+
+Experience level
+
+Profession
+
+Discipline
+
+All filters
+
+Clear All
+Hi Mokshith, showing personalized job recommendations sorted based on your resume.
+Mokshith Narayan - resume.pdf
+
+1 job
+
+Sort: Match score
+
+Turn on job alerts for this search
+Manage
+Product Management
+India, Karnataka, Bangalore
+Posted 16 hours ago
+Product Management
+India, Karnataka, Bangalore
+Apply now
+
+Remove from cart
+
+
+Matched for
+Stakeholder Management
+Data Analysis
+Project Management
+Product Lifecycle
+Automation
+Analytics
+Business
+
+Job description
+
+Company and benefits
+Job number
+200037192
+Date posted
+May 27, 2026
+Work site
+3 days / week in-office
+Travel
+Less than 25%
+Profession
+Product Management
+Discipline
+Product Management
+Role type
+Individual Contributor
+Employment type
+Full-Time
+Overview
+Microsoft is a company where passionate innovators come to collaborate, envision what can be and take their careers further. This is a world of more possibilities, more innovation, more openness, and the sky is the limit thinking in a cloud-enabled world. 
+
+Microsoft’s Azure Data engineering team is leading the transformation of analytics in the world of data with products like databases, data integration, big data analytics, messaging & real-time analytics, and business intelligence. The products our portfolio include Microsoft Fabric, Azure SQL DB, Azure Cosmos DB, Azure PostgreSQL, Azure Data Factory, Azure Synapse Analytics, Azure Service Bus, Azure Event Grid, and Power BI. Our mission is to build the data platform for the age of AI, powering a new class of data-first applications and driving a data culture. 
+
+​​Within Azure Data, the Azure Data Analytics team builds the core analytics experiences in Microsoft Fabric. We own the Data Warehouse, Data Engineering, Data Science, AI, and Power BI workloads, enabling customers to ingest, transform, analyze, and derive insights from structured, semi-structured, and unstructured data at enterprise scale. Our team is at the center of Microsoft's strategy to deliver a seamless, end-to-end analytics experience in Fabric.​ 
+
+​​​​
+
+We do not just value differences or different perspectives. We seek them out and invite them in so we can tap into the collective power of everyone in the company. As a result, our customers are better served. 
+
+
+
+Responsibilities
+​​​​
+
+Customer support: Directly engage with internal and external customers to ensure they are informed about the deprecation, acknowledge it, and receive the guidance they need to transition to supported versions. Align with them on the deprecation and disablement timeline and influence timely migration.
+
+Process and communication management: Develop and implement a structured, scalable approach for handling customer inquiries, reducing the load on internal teams and ensuring clear, consistent messaging.
+
+Telemetry‑driven outreach: Regularly review telemetry to identify active users of deprecated versions and proactively engage them ahead of service disablement. 
+
+Documentation and playbook enhancement: Collaborate with the Azure Retirement Team to refine and strengthen the deprecation playbook, ensuring it effectively supports the scale and complexity of our customer base. 
+
+
+
+Qualifications
+Required Qualification:
+
+​​Bachelor's Degree OR equivalent experience.​ 
+
+​​1+ years' experience in writing SQL queries for analytics 
+
+
+1+ years' experience with Power BI for analytics 
+
+
+1+ years' experience in writing Kusto queries for analytics​  
+
+#azdata
+
+#azuredata 
+
+#EiP
+
+
+This position will be open for a minimum of 5 days, with applications accepted on an ongoing basis until the position is filled.
+
+
+
+Microsoft is an equal opportunity employer. All qualified applicants will receive consideration for employment without regard to age, ancestry, citizenship, color, family or medical care leave, gender identity or expression, genetic information, immigration status, marital status, medical condition, national origin, physical or mental disability, political affiliation, protected veteran or military status, race, ethnicity, religion, sex (including pregnancy), sexual orientation, or any other characteristic protected by applicable local laws, regulations and ordinances. If you need assistance with religious accommodations and/or a reasonable accommodation due to a disability during the application process, read more about requesting accommodations.
+
+Insights from previous hires
+Top skills
+Automation
+Amazon Web Services (AWS)
+Adoption
+Administration
+Business
+Budgeting
+Asset Management
+Analytics
+Usage Performance
+Product Design
+Previously worked as
+1. Senior Product Manager
+2. Principal Product Manager
+3. Product Manager II
+4. Business Program Manager
+5. Senior Product Marketing Manager
+Similar jobs
+
+
+Software Engineer
+India, Telangana, Hyderabad + 1 more
+Posted 7 days ago
+
+Good match
+Software Engineering
+India, Karnataka, Bangalore
+Posted 16 hours ago
+Consultant - Apps Full Stack Engineer A2
+India, Telangana, Hyderabad + 2 more
+Posted 14 days ago
+Senior Software Engineer
+India, Karnataka, Bangalore
+Posted a month ago
+Software Engineering
+India, Karnataka, Bangalore
+Posted 16 hours ago
+Software Engineer
+India, Karnataka, Bangalore
+Posted 4 months ago
+Software Engineer 2
+India, Telangana, Hyderabad + 1 more
+Posted 2 days ago
+Senior Consultant Apps - (AI + Full stack )
+India, Telangana, Hyderabad + 2 more
+Posted 15 days ago
+Product Manager II
+India, Karnataka, Bangalore
+Posted 3 months ago
+Software Engineer II
+India, Karnataka, Bangalore
+Posted 20 hours ago
+English | FR - Canada
+Support
+Accessibility
+Microsoft Data Privacy Notice
+Transparency FAQ
+Legal policies
+Contractor roles
+Your Privacy Choices
+Consumer Health Privacy
+Privacy
+Trademarks
+Terms of use
+© Microsoft 2026
