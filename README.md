@@ -2,7 +2,7 @@
 
 A full-stack analytics platform simulating a cloud service deprecation and customer migration program.
 
-**[Live Demo →](https://service-migration-strategy.mn409.replit.app)** &nbsp;|&nbsp; Built with PostgreSQL · Express · React · Recharts · TanStack Table
+**[Live Demo →](https://service-migration-strategy--madmonk409.replit.app/)** &nbsp;|&nbsp; Built with PostgreSQL · Express · React · Recharts · TanStack Table
 
 ---
 
